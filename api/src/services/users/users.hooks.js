@@ -13,15 +13,6 @@ function beforecreate() {
       0,
       context.data.email.indexOf('@')
     );
-    // if (context.data.password.length < 8) {
-    //   context.statusCode = 400;
-    //   context.errors = context.errors + '{'Password':{'message': 'Error in Password.'}}';
-    //   //return context;
-
-    //   throw new errors.BadRequest('Password must be longer than 8 characters', {
-    //     password: context.data.password
-    //   }); //new errors.Error('Password must be longer than 8 characters');
-    // }
     if (context.data.password.length > 8) hashPassword();
   };
 }
