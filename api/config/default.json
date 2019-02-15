@@ -11,5 +11,30 @@
     "connection": {
       "filename": "storage/dev.sqlite"
     }
-  }
+  },
+  "authentication": {
+    "secret": "b8ff6e1e1cbbdef1eaf67faf81e959670d983a6bf7bdfd4cf9da6db963f7c5639535ea1b10fbb96060cfc736a2c74b38889db48d834e5975279f26e6819db9fc3d11d98ad05ac87140a9b1e6c4a44047731331d06755f047eb0150f89dd41571440588f3aec34ae0fd9d5445de2251a2f9292a15339953302f0a8b04355c81a75881d0c636f10edf54feeff62a06bad221fc243f99a584f8045b86a6773ab54a2b0c3f0e1e4abede361151795da570cb1397315c18d2cf6dba14473dc61d71a4f14d3b1361cf7b140c68d6f71d718a54971699f8086e1388aba9e86a6e73840b9e44c501bbe7d4aca2fe7f8963d312275f4ccf012c71da34b41246f33db5bc46",
+    "strategies": [
+      "jwt",
+      "local"
+    ],
+    "path": "/authentication",
+    "service": "users",
+    "jwt": {
+      "header": {
+        "typ": "access"
+      },
+      "audience": "https://yourdomain.com",
+      "subject": "anonymous",
+      "issuer": "feathers",
+      "algorithm": "HS256",
+      "expiresIn": "1d"
+    },
+    "local": {
+      "entity": "user",
+      "usernameField": "email",
+      "passwordField": "password"
+    }
+  },
+  "mongodb": "mongodb://localhost:27017/trello_clone"
 }
