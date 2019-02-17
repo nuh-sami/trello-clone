@@ -1,36 +1,26 @@
-// users-model.js - A mongoose model
+/* eslint-disable no-console */
+
+// users-model.js - A KnexJS
 //
-// See http://mongoosejs.com/docs/models.html
+// See http://knexjs.org/
 // for more of what you can do here.
-module.exports = function (app) {
-  const mongooseClient = app.get('mongooseClient');
-  const users = new mongooseClient.Schema({
-
-    email: {
-      type: String,
-      unique: true,
-      lowercase: true,
-      required: true,
-      match: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    },
-    password: {
-      type: String,
-      required: true,
-      minlength: 8
-    },
-    active: {
-      type: Boolean,
-      required: true
-    },
-    displayname: {
-      type: String,
-      required: true
+module.exports = async function (app) {
+  const db = app.get('knexClient');
+  const tableName = 'users';
+  try {
+    let exists = await db.schema.hasTable(tableName);
+    if(!exists) {
+        await db.schema.createTable(tableName, table => {
+          table.increments('id');
+          table.string('name').unique();
+          table.string('email').unique();
+          table.string('password');
+          table.boolean('active').defaultTo(false);
+        });
+        console.log(`Created ${tableName} table`);
     }
-
-
-  }, {
-    timestamps: true
-  });
-
-  return mongooseClient.model('users', users);
+  } catch(e) {
+    console.error(`Error creating ${tableName} table`, e);
+  }
+  return db;
 };

@@ -1,27 +1,19 @@
-const {
-  authenticate
-} = require('@feathersjs/authentication').hooks;
+const { authenticate } = require('@feathersjs/authentication').hooks;
+const { hashPassword, protect} = require('@feathersjs/authentication-local').hooks;
+// validation utils to setup validation method
+const {Joi, validate} = require('../../utils/validation');
 
-const {
-  hashPassword,
-  protect
-} = require('@feathersjs/authentication-local').hooks;
+// validation rules of the service
+const rules = require('./users.validation');
 
-function beforecreate() {
-  return function (context) {
-    context.data.displayname = context.data.email.substring(
-      0,
-      context.data.email.indexOf('@')
-    );
-    if (context.data.password.length > 8) hashPassword();
-  };
-}
+let schema = rules.createRequest(Joi);
+
 module.exports = {
   before: {
     all: [],
     find: [authenticate('jwt')],
     get: [authenticate('jwt')],
-    create: [beforecreate()],
+    create: [hashPassword()],
     update: [hashPassword(), authenticate('jwt')],
     patch: [hashPassword(), authenticate('jwt')],
     remove: [authenticate('jwt')]
