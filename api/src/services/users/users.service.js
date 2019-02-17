@@ -3,7 +3,7 @@ const createService = require('feathers-knex');
 const createModel = require('../../models/users.model');
 const hooks = require('./users.hooks');
 
-module.exports = function (app) {
+module.exports = async function (app) {
   const Model = createModel(app);
   const paginate = app.get('paginate');
 
@@ -21,4 +21,4 @@ module.exports = function (app) {
 
   service.hooks(hooks);
 };
-  
+

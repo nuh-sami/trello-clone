@@ -6,6 +6,7 @@ const {Joi, validate} = require('../../utils/validation');
 // validation rules of the service
 const rules = require('./users.validation');
 
+// prepare the rules for the fields
 let schema = rules.createRequest(Joi);
 
 module.exports = {
@@ -13,7 +14,7 @@ module.exports = {
     all: [],
     find: [authenticate('jwt')],
     get: [authenticate('jwt')],
-    create: [hashPassword()],
+    create: [validate(schema), hashPassword()],
     update: [hashPassword(), authenticate('jwt')],
     patch: [hashPassword(), authenticate('jwt')],
     remove: [authenticate('jwt')]

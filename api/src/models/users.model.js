@@ -4,11 +4,10 @@
 //
 // See http://knexjs.org/
 // for more of what you can do here.
-module.exports = async function (app) {
+module.exports = function (app) {
   const db = app.get('knexClient');
   const tableName = 'users';
-  try {
-    let exists = await db.schema.hasTable(tableName);
+  let exists = db.schema.hasTable(tableName).then(async exists => {
     if(!exists) {
         await db.schema.createTable(tableName, table => {
           table.increments('id');
@@ -19,8 +18,8 @@ module.exports = async function (app) {
         });
         console.log(`Created ${tableName} table`);
     }
-  } catch(e) {
+  }).catch(e => {
     console.error(`Error creating ${tableName} table`, e);
-  }
+  })
   return db;
 };
